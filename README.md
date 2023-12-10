@@ -1,0 +1,2 @@
+# krone.nvim
+neovim configs
