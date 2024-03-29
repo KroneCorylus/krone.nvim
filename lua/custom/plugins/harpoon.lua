@@ -1,3 +1,15 @@
+local function index_of(items, element)
+  local index = -1
+  for i, item in ipairs(items) do
+    if item == element then
+      index = i
+      break
+    end
+  end
+
+  return index
+end
+
 local function list_from_folder()
   local harpoon = require("harpoon")
   local plenary = require("plenary")
@@ -19,7 +31,10 @@ local function cycle_folder_list_next()
   local dir = vim.fn.expand('%:p:h')
   local plenary = require("plenary")
   local relativeDir = plenary.path:new(dir):make_relative()
-  print("next in Harpoon List: ", relativeDir)
+  local file = vim.api.nvim_buf_get_name(vim.api.nvim_get_current_buf())
+  local relativeFile = plenary.path:new(file):make_relative()
+  local current_index = index_of(harpoon:list(relativeDir):display(), relativeFile)
+  harpoon:list(relativeDir)._index = current_index
   harpoon:list(relativeDir):next({ ui_nav_wrap = true })
 end
 
@@ -28,7 +43,10 @@ local function cycle_folder_list_prev()
   local dir = vim.fn.expand('%:p:h')
   local plenary = require("plenary")
   local relativeDir = plenary.path:new(dir):make_relative()
-  print("prev in Harpoon List: ", relativeDir)
+  local file = vim.api.nvim_buf_get_name(vim.api.nvim_get_current_buf())
+  local relativeFile = plenary.path:new(file):make_relative()
+  local current_index = index_of(harpoon:list(relativeDir):display(), relativeFile)
+  harpoon:list(relativeDir)._index = current_index
   harpoon:list(relativeDir):prev({ ui_nav_wrap = true })
 end
 
@@ -79,9 +97,11 @@ local function next_list()
   local harpoonKey = harpoon.config.settings.key();
   local plenary = require("plenary")
   local relativeDir = plenary.path:new(vim.fn.expand('%:p:h')):make_relative()
-  local next_key = getNextKeyValuePair(relativeDir, harpoon.lists[harpoonKey])
-  harpoon:list(next_key):select(harpoon:list(next_key)._index)
-  print("Harpoon list: " .. next_key)
+  if harpoon.lists[harpoonKey] ~= nil then
+    local next_key = getNextKeyValuePair(relativeDir, harpoon.lists[harpoonKey])
+    harpoon:list(next_key):select(harpoon:list(next_key)._index)
+    print("Harpoon list: " .. next_key)
+  end
 end
 
 return
@@ -91,12 +111,11 @@ return
   dependencies = { "nvim-lua/plenary.nvim" },
   config = function()
     local harpoon = require("harpoon")
-    harpoon:setup()
+    harpoon:setup({})
 
     -- package.path = package.path .. ";../../keymaps.lua"
     -- keymaps = require("keymaps")
     -- harpoonKeyMaps()
-
     vim.keymap.set("n", "<leader>hl", "<Nop>", { desc = 'Create Harpoon list from current folder.' })
     vim.keymap.set("n", "<leader>hlf", list_from_folder, { desc = 'Create Harpoon list from current folder.' })
     vim.keymap.set("n", "<C-e>", show_folder_list)
@@ -104,10 +123,5 @@ return
     vim.keymap.set("n", "<S-Tab>", cycle_folder_list_prev)
     vim.keymap.set("n", "<leader>hlr", list_remove, { desc = 'Remove Harpoon list' })
     vim.keymap.set("n", "<C-l>", next_list)
-
-    -- vim.keymap.set("n", "<leader>z", folderToHarpoon2)
-    -- vim.keymap.set("n", "<C-e>", function() harpoon.ui:toggle_quick_menu(harpoon:list('magia')) end)
-    -- vim.keymap.set("n", "<C-l>", function() harpoon:list('magia'):prev({ ui_nav_wrap = true }) end)
-    -- vim.keymap.set("n", "<C-y>", function() harpoon:list('magia'):next({ ui_nav_wrap = true }) end)
   end
 }
