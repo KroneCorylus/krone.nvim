@@ -39,3 +39,5 @@ vim.o.tabstop = 4
 --Line number and relative number
 vim.wo.relativenumber = true
 vim.wo.number = true
+
+vim.opt.scrolloff = 10
