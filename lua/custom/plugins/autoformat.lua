@@ -28,6 +28,7 @@ return {
       return _augroups[client.id]
     end
 
+
     -- Whenever an LSP attaches to a buffer, we will run this function.
     --
     -- See `:help LspAttach` for more information about this autocmd event.
@@ -39,9 +40,15 @@ return {
         local client = vim.lsp.get_client_by_id(client_id)
         local bufnr = args.buf
         if client.name == 'tsserver' or client.name == 'html' or client.name == 'cssls' then
+          -- if client.name == 'tsserver' then
+          --   client.server_capabilities.referencesProvider = false;
+          -- end
           vim.api.nvim_create_autocmd('BufWritePre', {
             buffer = bufnr,
             command = "Prettier",
+            -- callback = function()
+            --   vim.cmd("Prettier")
+            -- end
           })
           return
         end
@@ -58,7 +65,6 @@ return {
             if not format_is_enabled then
               return
             end
-
             vim.lsp.buf.format {
               async = false,
               filter = function(c)
