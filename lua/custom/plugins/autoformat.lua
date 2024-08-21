@@ -3,12 +3,15 @@
 -- Use your language server to automatically format your code on save.
 -- Adds additional commands as well to manage the behavior
 
+
+
 return {
   'neovim/nvim-lspconfig',
   config = function()
     -- Switch for controlling whether you want autoformatting.
     --  Use :KickstartFormatToggle to toggle autoformatting on or off
     local format_is_enabled = true
+
     vim.api.nvim_create_user_command('KickstartFormatToggle', function()
       format_is_enabled = not format_is_enabled
       print('Setting autoformatting to: ' .. tostring(format_is_enabled))
@@ -28,6 +31,23 @@ return {
       return _augroups[client.id]
     end
 
+    local clients_lsp = function()
+      local bufnr = vim.api.nvim_get_current_buf()
+      local clients = vim.lsp.get_active_clients({ bufnr = bufnr })
+      if next(clients) == nil then
+        return ''
+      end
+
+      local c = {}
+      for _, client in pairs(clients) do
+        table.insert(c, client.name)
+      end
+      return '\u{f085} ' .. table.concat(c, '|')
+    end
+
+    vim.api.nvim_create_user_command('LspActive', function()
+      vim.print(clients_lsp())
+    end, {})
 
     -- Whenever an LSP attaches to a buffer, we will run this function.
     --
@@ -39,16 +59,19 @@ return {
         local client_id = args.data.client_id
         local client = vim.lsp.get_client_by_id(client_id)
         local bufnr = args.buf
-        if client.name == 'tsserver' or client.name == 'html' or client.name == 'cssls' then
+        if client.name == 'tsserver' or client.name == 'html' or client.name == 'cssls' or 'angularls' then
           -- if client.name == 'tsserver' then
           --   client.server_capabilities.referencesProvider = false;
           -- end
           vim.api.nvim_create_autocmd('BufWritePre', {
             buffer = bufnr,
-            command = "Prettier",
-            -- callback = function()
-            --   vim.cmd("Prettier")
-            -- end
+            -- command = "Prettier",
+            callback = function()
+              if not format_is_enabled then
+                return
+              end
+              vim.cmd("Prettier")
+            end
           })
           return
         end

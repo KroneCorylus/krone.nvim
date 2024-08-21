@@ -10,6 +10,22 @@ local function index_of(items, element)
   return index
 end
 
+local function remove_file_from_list()
+
+  local harpoon = require("harpoon")
+  local plenary = require("plenary")
+
+  local currentFile = vim.fn.expand('%')
+  local dir = vim.fn.expand('%:p:h')
+  local relativeDir = plenary.path:new(dir):make_relative()
+
+  vim.print(harpoon:list(relativeDir):display())
+    harpoon:list(relativeDir):remove()
+    -- harpoon:list(relativeDir):remove({value=currentFile})
+
+end
+
+
 local function list_from_folder()
   local harpoon = require("harpoon")
   local plenary = require("plenary")
@@ -21,7 +37,8 @@ local function list_from_folder()
   local files = vim.fn.systemlist("ls -p " .. dir .. " | grep -v /")
   for k in pairs(files) do
     local path = relativeDir .. "/" .. files[k]
-    harpoon:list(relativeDir):append({ context = { col = 0, row = 1 }, value = path })
+    harpoon:list(relativeDir):add({ context = { col = 0, row = 1 }, value = path })
+    -- harpoon:list(relativeDir):add(path)
   end
 end
 
@@ -122,6 +139,7 @@ return
     vim.keymap.set("n", "<Tab>", cycle_folder_list_next)
     vim.keymap.set("n", "<S-Tab>", cycle_folder_list_prev)
     vim.keymap.set("n", "<leader>hlr", list_remove, { desc = 'Remove Harpoon list' })
+    vim.keymap.set("n", "<leader>hlx", remove_file_from_list, { desc = 'Remove this file from current list' })
     vim.keymap.set("n", "<C-l>", next_list)
   end
 }

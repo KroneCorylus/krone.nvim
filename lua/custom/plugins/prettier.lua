@@ -9,6 +9,7 @@ local conf = function()
     'html',
     'css',
     'scss',
+    'angular.html',
     -- Add other file types as needed
   }
 end

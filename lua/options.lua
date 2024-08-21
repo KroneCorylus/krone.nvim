@@ -23,7 +23,7 @@ vim.o.completeopt = 'menuone,noselect'
 -- NOTE: You should make sure your terminal supports this
 vim.o.termguicolors = true
 --Tab settings
-vim.o.noexpandtab = true
+vim.o.expandtab = false 
 vim.o.tabstop = 4
 --Line number and relative number
 vim.wo.relativenumber = true

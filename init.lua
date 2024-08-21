@@ -120,7 +120,7 @@ vim.defer_fn(function()
     sync_install = false,
     ignore_install = {},
     -- Add languages to be installed here that you want installed for treesitter
-    ensure_installed = { 'c', 'cpp', 'go', 'lua', 'python', 'rust', 'tsx', 'javascript', 'typescript', 'vimdoc', 'vim', 'bash', 'html', 'scss', 'css', 'angular' },
+    ensure_installed = { 'c', 'cpp', 'go', 'lua', 'python', 'rust', 'tsx', 'javascript', 'typescript', 'vimdoc', 'vim', 'bash', 'html', 'scss', 'css', 'angular', 'markdown' },
 
     -- Autoinstall languages that are not installed. Defaults to false (but you can change for yourself!)
     auto_install = false,
@@ -258,7 +258,17 @@ local servers = {
     filetypes = { 'angular.html' }
   },
   gopls = {},
-  pylsp = {},
+  pylsp = {
+       pylsp = {
+        plugins = {
+            pycodestyle = {
+                    enabled = true,
+                    ignore = { 'E501' },
+                    maxLineLength = 120,
+                },
+        }
+    }
+  },
   -- pyright = {},
   -- clangd = {},
   -- gopls = {},
