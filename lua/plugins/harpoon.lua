@@ -130,16 +130,12 @@ return
     local harpoon = require("harpoon")
     harpoon:setup({})
 
-    -- package.path = package.path .. ";../../keymaps.lua"
-    -- keymaps = require("keymaps")
-    -- harpoonKeyMaps()
-    vim.keymap.set("n", "<leader>hl", "<Nop>", { desc = 'Create Harpoon list from current folder.' })
-    vim.keymap.set("n", "<leader>hlf", list_from_folder, { desc = 'Create Harpoon list from current folder.' })
-    vim.keymap.set("n", "<C-e>", show_folder_list)
-    vim.keymap.set("n", "<Tab>", cycle_folder_list_next)
-    vim.keymap.set("n", "<S-Tab>", cycle_folder_list_prev)
-    vim.keymap.set("n", "<leader>hlr", list_remove, { desc = 'Remove Harpoon list' })
-    vim.keymap.set("n", "<leader>hlx", remove_file_from_list, { desc = 'Remove this file from current list' })
-    vim.keymap.set("n", "<C-l>", next_list)
+    vim.keymap.set("n", "<leader>hf", list_from_folder, { desc = 'Create [H]arpoon list from current [F]older.' })
+    vim.keymap.set("n", "<leader>hd", list_remove, { desc = '[H]arpoon [D]elete current folder list' })
+    -- vim.keymap.set("n", "<leader>hx", remove_file_from_list, { desc = 'Harpoon this file from current list' })
+    vim.keymap.set("n", "<C-l>", next_list, {desc = 'next list'})
+    vim.keymap.set("n", "<C-e>", show_folder_list, {desc = 'Show the current directory harpoon list'})
+    vim.keymap.set("n", "<Tab>", cycle_folder_list_next, { desc = 'next element on list'})
+    vim.keymap.set("n", "<S-Tab>", cycle_folder_list_prev, {desc = 'prev element on list'})
   end
 }
