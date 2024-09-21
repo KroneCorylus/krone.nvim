@@ -275,7 +275,7 @@ local servers = {
   -- gopls = {},
   -- rust_analyzer = {},
   jdtls = {},
-  tsserver = {
+  ts_ls = {
 
     init_options = {
       preferences = {
