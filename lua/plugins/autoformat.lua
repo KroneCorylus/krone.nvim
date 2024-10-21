@@ -60,7 +60,7 @@ return {
         local client = vim.lsp.get_client_by_id(client_id)
         local bufnr = args.buf
         if not client then return end
-        if client.name == 'tsserver' or client.name == 'html' or client.name == 'cssls' or client.name == 'angularls'
+        if client.name == 'tsserver' or client.name == 'ts_ls' or client.name == 'html' or client.name == 'cssls' or client.name == 'angularls'
         then
           -- if client.name == 'tsserver' then
           --   client.server_capabilities.referencesProvider = false;

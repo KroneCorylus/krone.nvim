@@ -2,6 +2,25 @@ return {
   -- Fuzzy Finder (files, lsp, etc)
   'nvim-telescope/telescope.nvim',
   branch = '0.1.x',
+  opts = {
+    defaults = {
+      extensions = {
+        undo = {
+          -- telescope-undo.nvim config, see below
+        },
+      },
+      mappings = {
+        i = {
+          --['<C-u>'] = false,
+          ['<C-x>'] = require('telescope.actions').delete_buffer,
+          --['<c-d>'] = false
+        },
+        n = {
+          ['<C-x>'] = require('telescope.actions').delete_buffer
+        }
+      },
+    },
+  },
   dependencies = {
     'nvim-lua/plenary.nvim',
     -- Fuzzy Finder Algorithm which requires local dependencies to be built.
